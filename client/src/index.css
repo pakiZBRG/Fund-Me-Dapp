@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+      font-family: Montserrat;
+      letter-spacing: 0.03em;
+  }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  background: #222;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(255,255,255,0.3); 
+}
+
+.bg-gradient {
+  background-color:hsla(188,0%,7%,1);
+  background-image:
+    radial-gradient(at 39% 57%, hsla(8,0%,7%,1) 0px, transparent 50%),
+    radial-gradient(at 77% 61%, hsla(341,0%,7%,0.65) 0px, transparent 50%),
+    radial-gradient(at 19% 2%, hsla(257,87%,64%,0.32) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(145,84%,62%,0.27) 0px, transparent 50%),
+    radial-gradient(at 17% 79%, hsla(307,84%,61%,0.39) 0px, transparent 50%);
+}
+
+.white-glassmorphism {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.black-glassmorphism {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 1rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.border{
+  width: 1px;
+  height: 100px;
+  width: whitesmoke;
+}
