@@ -13,7 +13,8 @@
     "react-scripts": "^5.0.1",
     "react-toastify": "^9.0.5",
     "ethers": "^5.5.4",
-    "vite": "^2.9.9"
+    "vite": "^2.9.9",
+    "react-icons": "^4.4.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
