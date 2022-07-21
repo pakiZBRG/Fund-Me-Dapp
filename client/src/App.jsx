@@ -71,7 +71,8 @@ const App = () => {
     const getFundsOfFunder = async (address) => {
         if (address.length === 42) {
             const filteredFunders = funders.filter(funder => funder.funder === address);
-            setFunders(filteredFunders)
+            const sortEvents = filteredFunders.sort((a, b) => b.timestamp.localeCompare(a.timestamp))
+            setFunders(sortEvents)
         } else {
             await fundEvents()
         }
@@ -89,7 +90,8 @@ const App = () => {
                 timestamp: time.toString().substr(4, 17)
             }
         })
-        setFunders(formattedEvents)
+        const sortEvents = formattedEvents.sort((a, b) => b.timestamp.localeCompare(a.timestamp))
+        setFunders(sortEvents)
     }
 
     const getOwner = async () => {
