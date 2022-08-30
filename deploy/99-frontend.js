@@ -2,8 +2,8 @@ const path = require('path')
 const fs = require('fs');
 const { ethers } = require('hardhat');
 
-const ABI_PATH = path.join(__dirname, '../client/src/utils/ABI.json')
-const CONTRACT_ADDRESS_PATH = path.join(__dirname, '../client/src/utils/contractAddress.json')
+const ABI_PATH = path.join(__dirname, '../client/src/contract/ABI.json')
+const CONTRACT_ADDRESS_PATH = path.join(__dirname, '../client/src/contract/contractAddress.json')
 
 module.exports = async () => {
     console.log("Writing ABI and contract address to frontend...")

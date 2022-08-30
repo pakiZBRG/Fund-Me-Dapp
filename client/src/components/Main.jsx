@@ -1,7 +1,7 @@
 import Loader from './Loader'
 import { FiInfo, FiSearch } from 'react-icons/fi'
 
-const Main = ({ totalFunded, totalFundedInUsd, address, chainMessage, sendAmount, setSendAmount, sendAllEther, sendFunds, loading, funders, withdraw, owner, minimumUSD, getFundsOfFunder }) => {
+const Main = ({ totalFunded, totalFundedInUsd, address, sendAmount, setSendAmount, sendAllEther, sendFunds, loading, funders, withdraw, owner, minimumUSD, getFundsOfFunder }) => {
     return (
         <>
             <article className='py-12 flex flex-col items-center'>
@@ -11,39 +11,35 @@ const Main = ({ totalFunded, totalFundedInUsd, address, chainMessage, sendAmount
                 </h1>
                 <h5 className='pt-1 pb-12 text-slate-300'>${totalFundedInUsd}</h5>
                 {address ?
-                    <>
-                        {chainMessage ?
-                            <p className='text-slate-100 text-xl'>{chainMessage}</p>
-                            :
-                            <section className='flex flex-col'>
-                                <div className='flex md:flex-row flex-col'>
-                                    <div className='flex-1 white-glassmorphism rounded-full'>
-                                        <input
-                                            type={'number'}
-                                            className='px-5 py-2 bg-transparent text-white outline-none rounded-full'
-                                            onChange={e => setSendAmount(e.target.value)}
-                                            value={sendAmount}
-                                        />
-                                        <button className='text-slate-400 mr-2 p-1 text-sm rounded hover:bg-[#ffffff11] duration-200' onClick={sendAllEther}>MAX</button>
-                                        <button onClick={sendFunds} disabled={loading.fund} className={`${loading.fund ? 'bg-rose-400' : 'bg-rose-600'} hover:shadow-rose-500/20 duration-300 shadow-xl text-sm text-white px-5 h-10 rounded-full`}>
-                                            {!loading.fund ? 'Send Funds' : <Loader />}
-                                        </button>
-                                    </div>
-                                    <button
-                                        onClick={withdraw}
-                                        disabled={owner.toLowerCase() !== address.toLowerCase() || loading.withdraw}
-                                        className={`hover:shadow-blue-500/20 duration-300 shadow-xl ml-3 text-white px-5 py-2 rounded-full text-sm mt-5 md:mt-0 ${loading.withdraw ? 'bg-blue-500' : 'bg-blue-700'} ${owner.toLowerCase() !== address.toLowerCase() && 'cursor-not-allowed bg-blue-400'}`}
-                                    >
-                                        {!loading.withdraw ? 'Withdraw' : <Loader />}
-                                    </button>
-                                </div>
-                                <span className='text-[.8rem] mt-1 text-slate-500'>
-                                    Minimum:
-                                    <span className='font-bold text-white ml-1'>{minimumUSD} ETH</span>
-                                </span>
-                            </section>
-                        }
-                    </>
+                    <section className='flex flex-col'>
+                        <div className='flex md:flex-row flex-col'>
+                            <div className='flex-1 white-glassmorphism rounded-full'>
+                                <input
+                                    type={'number'}
+                                    className='px-5 py-2 bg-transparent text-white outline-none rounded-full'
+                                    onChange={e => setSendAmount(e.target.value)}
+                                    value={sendAmount}
+                                />
+                                <button className='text-slate-400 mr-2 p-1 text-sm rounded hover:bg-[#ffffff11] duration-200' onClick={sendAllEther}>MAX</button>
+                                <button onClick={sendFunds} disabled={loading.fund} className={`${loading.fund ? 'bg-rose-500' : 'bg-rose-700'} hover:shadow-rose-500/20 duration-300 shadow-xl text-sm text-white px-5 h-10 rounded-full`}>
+                                    {!loading.fund ? 'Send Funds' : <Loader />}
+                                </button>
+                            </div>
+                            <button
+                                onClick={withdraw}
+                                disabled={owner.toLowerCase() !== address.toLowerCase() || loading.withdraw}
+                                className={`hover:shadow-blue-500/20 duration-300 shadow-xl ml-3 text-white px-5 py-2 rounded-full text-sm mt-5 md:mt-0 ${loading.withdraw ? 'bg-blue-500' : 'bg-blue-700'} ${owner.toLowerCase() !== address.toLowerCase() && 'cursor-not-allowed bg-blue-400'}`}
+                            >
+                                {!loading.withdraw ? 'Withdraw' : <Loader />}
+                            </button>
+                        </div>
+                        <span className='text-[.8rem] mt-1 text-slate-500'>
+                            Minimum:
+                            <span className='font-bold text-white ml-1 cursor-pointer' onClick={() => setSendAmount(minimumUSD)}>
+                                {minimumUSD} ETH
+                            </span>
+                        </span>
+                    </section>
                     :
                     <p className='text-xl text-slate-100'>Connect to your Metamask</p>
                 }

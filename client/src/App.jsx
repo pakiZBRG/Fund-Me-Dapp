@@ -31,6 +31,22 @@ const App = () => {
         return contract
     }
 
+    const getCurrentNetwork = async () => {
+        const network = await provider.getNetwork();
+        if (contractAddress[+network.chainId]) {
+            setChainMessage("")
+        } else {
+            setChainMessage("Please use Goerli network")
+            if (!contractAddress[+network.chainId]) {
+                await ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: '0x5' }]
+                });
+            }
+            window.location.reload()
+        }
+    }
+
     const getEthPrice = async () => {
         const contract = await getContract(provider);
         const price = await contract.getEthPrice();
@@ -42,7 +58,7 @@ const App = () => {
     const getFunds = async () => {
         const contract = await getContract(provider);
         setAddressOfContract(contract.address)
-        const funds = await provider.getBalance(contract.address);
+        const funds = await contract.totalBalance();
         const numEth = formatBigNumber(funds, 3)
         setTotalFunded(numEth)
     }
@@ -102,8 +118,8 @@ const App = () => {
 
     const sendFunds = async () => {
         try {
-            if (+sendAmount <= +minimumUSD) {
-                toast.info("Please input minimum of 0.0135 ETH")
+            if (+sendAmount < +minimumUSD) {
+                toast.info(`Please input minimum of ${minimumUSD} ETH`)
                 return;
             }
             setLoading({ fund: true })
@@ -111,6 +127,7 @@ const App = () => {
             const amountInWei = ethers.utils.parseUnits(sendAmount, 18)
 
             const tx = await contract.fund({ value: amountInWei });
+            toast.info("Transaction is being mined. Please wait...")
             await tx.wait(1)
             setLoading({ fund: false })
 
@@ -118,11 +135,13 @@ const App = () => {
             getFunds();
             setSendAmount('');
             fundEvents();
-            toast.info("Transaction completed")
+            toast.success("Transaction completed")
         } catch (error) {
             setLoading({ fund: false })
-            if (error.data.message.includes("FundMe__InsufficientFunds")) {
+            if (error.message.includes("FundMe__InsufficientFunds")) {
                 toast.error("Not enough ETH")
+            } else if (error.message.includes("User denied transaction signature")) {
+                toast.info("Transaction cancelled")
             } else {
                 console.log(error.message)
             }
@@ -135,16 +154,19 @@ const App = () => {
             setLoading({ withdraw: true })
 
             const tx = await contract.withdraw();
+            toast.info("Transaction is being mined. Please wait...")
             await tx.wait(1)
             setLoading({ withdraw: false })
 
             connectWallet();
             getFunds();
-            toast.info("Funds withdrawn")
+            toast.success("Funds withdrawn")
         } catch (error) {
             setLoading({ withdraw: false })
             if (error.message.includes("FundMe__NotOwner")) {
                 toast.error("Not an owner of the contract")
+            } else if (error.message.includes("User denied transaction signature")) {
+                toast.info("Transaction cancelled")
             } else {
                 console.log(error.message)
             }
@@ -164,9 +186,11 @@ const App = () => {
                 if (contractAddress[+chainId]) {
                     setChainMessage("")
                 } else {
-                    setChainMessage("Please use Rinkeby")
+                    setChainMessage("Please use Goerli network")
                 }
             });
+
+            getCurrentNetwork();
             getContract();
             getEthPrice();
             getFunds();
@@ -182,36 +206,41 @@ const App = () => {
     }, [])
 
     const sendAllEther = () => {
-        // leave 2% of all funds
-        setSendAmount((+account.balance - (+account.balance / 50)).toFixed(3).toString())
+        // leave 1% of all funds
+        setSendAmount((+account.balance - (+account.balance / 100)).toFixed(3).toString())
     }
 
     return (
-        <div className='bg-gradient min-h-screen flex flex-col'>
+        <>
             <ToastContainer position='bottom-right' theme='dark' />
-            <Nav
-                account={account}
-                metamaskMessage={metamaskMessage}
-                connectWallet={connectWallet}
-            />
-            <Main
-                totalFunded={totalFunded}
-                totalFundedInUsd={totalFundedInUsd}
-                address={account.address}
-                chainMessage={chainMessage}
-                sendAmount={sendAmount}
-                setSendAmount={setSendAmount}
-                sendAllEther={sendAllEther}
-                sendFunds={sendFunds}
-                loading={loading}
-                funders={funders}
-                withdraw={withdraw}
-                owner={owner}
-                minimumUSD={minimumUSD}
-                getFundsOfFunder={getFundsOfFunder}
-            />
-            <Footer price={price} addressOfContract={addressOfContract} />
-        </div >
+            <div className='bg-gradient min-h-screen flex flex flex-col justify-between'>
+                <Nav
+                    account={account}
+                    metamaskMessage={metamaskMessage}
+                    connectWallet={connectWallet}
+                />
+                {chainMessage ?
+                    <p className='text-center mt-16 text-3xl text-white'>{chainMessage}</p>
+                    :
+                    <Main
+                        totalFunded={totalFunded}
+                        totalFundedInUsd={totalFundedInUsd}
+                        address={account.address}
+                        sendAmount={sendAmount}
+                        setSendAmount={setSendAmount}
+                        sendAllEther={sendAllEther}
+                        sendFunds={sendFunds}
+                        loading={loading}
+                        funders={funders}
+                        withdraw={withdraw}
+                        owner={owner}
+                        minimumUSD={minimumUSD}
+                        getFundsOfFunder={getFundsOfFunder}
+                    />
+                }
+                <Footer price={price} addressOfContract={addressOfContract} />
+            </div >
+        </>
     )
 }
 

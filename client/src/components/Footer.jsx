@@ -13,7 +13,7 @@ const Footer = ({ price, addressOfContract }) => {
                 >
                     <FaEthereum className='text-lg mr-1 text-slate-400' />{price}
                 </a>
-                <a href={`https://rinkeby.etherscan.io/address/${addressOfContract}`} target={'_blank'} className='underline text-slate-200 text-sm ml-4'>Contract</a>
+                <a href={`https://goerli.etherscan.io/address/${addressOfContract}`} target={'_blank'} className='underline text-slate-200 text-sm ml-4'>Contract</a>
             </div>
             <div className='flex flex-row items-center'>
                 <a href='https://github.com/pakiZBRG/Fund-Me-Dapp' target={'_blank'} className='text-slate-100 text-xl'>

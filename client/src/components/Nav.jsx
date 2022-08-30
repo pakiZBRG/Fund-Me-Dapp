@@ -13,7 +13,7 @@ const Nav = ({ account, metamaskMessage, connectWallet }) => {
                 ?
                 <p className='text-sm mr-5 text-slate-200 border-[1px] border-slate-500 px-5 py-2 rounded-full'>
                     {shortenAddress(address)}
-                    <span className='mx-2 border'></span>
+                    <span className='mx-3 border'></span>
                     <span>{balance}</span>
                 </p>
                 :
