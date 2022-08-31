@@ -6,8 +6,11 @@ import { Footer, Main, Nav } from './components';
 import { formatBigNumber } from './utils'
 import 'react-toastify/dist/ReactToastify.css';
 
-const provider = new ethers.providers.Web3Provider(window.ethereum);
-const signer = provider.getSigner();
+let provider, signer
+if (window.ethereum) {
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    signer = provider.getSigner()
+}
 
 const App = () => {
     const [owner, setOwner] = useState('');
